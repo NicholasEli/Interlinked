@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Victoria and Nicholas’s movie trailer watchlist." />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="theme-color" content="#17141a" />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&amp;display=swap" />
+    <title>Interlinked</title>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="page-header">
+        <h1>Interlinked<span>.</span></h1>
+        <p>Victoria and Nicholas’s trailer watchlist</p>
+      </header>
+      <p id="board-status" class="board-status" role="status">Open your board link to see the trailers.</p>
+      <div id="columns" class="columns" hidden></div>
+    </main>
+
+    <template id="column-template">
+      <section class="column">
+        <h2></h2>
+        <form class="add-form" novalidate>
+          <label>YouTube URL</label>
+          <div class="form-row">
+            <input name="url" type="url" inputmode="url" placeholder="https://youtu.be/…" autocomplete="off" required />
+            <button class="add-button" type="submit">Add trailer</button>
+          </div>
+        </form>
+        <p class="column-error" role="alert" hidden></p>
+        <p class="empty" hidden>No trailers yet.</p>
+        <ul class="trailer-list"></ul>
+      </section>
+    </template>
+
+    <template id="trailer-template">
+      <li class="trailer">
+        <a class="thumbnail" target="_blank" rel="noopener noreferrer">
+          <img alt="" loading="lazy" />
+          <span class="play" aria-hidden="true">▶</span>
+        </a>
+        <div class="trailer-actions">
+          <label class="watched"><input type="checkbox" /> Watched</label>
+          <button class="delete-button" type="button">Delete</button>
+        </div>
+      </li>
+    </template>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

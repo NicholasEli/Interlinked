@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function boardIsEnabled(boardKey) {
+      return boardKey.matches('^[A-Za-z0-9_-]{43}$')
+        && get(/databases/$(database)/documents/boards/$(boardKey)).data.enabled == true;
+    }
+
+    function validTrailer(data) {
+      let fields = ['videoId', 'column', 'watched', 'createdAt'];
+      return data.keys().hasAll(fields)
+        && data.keys().hasOnly(fields)
+        && data.videoId is string
+        && data.videoId.matches('^[A-Za-z0-9_-]{11}$')
+        && data.column in ['victoria', 'nicholas']
+        && data.watched is bool
+        && data.createdAt is timestamp;
+    }
+
+    match /boards/{boardKey}/trailers/{trailerId} {
+      allow read, delete: if boardIsEnabled(boardKey);
+      allow create: if boardIsEnabled(boardKey)
+        && validTrailer(request.resource.data)
+        && request.resource.data.watched == false
+        && request.resource.data.createdAt == request.time;
+      allow update: if boardIsEnabled(boardKey)
+        && validTrailer(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['watched']);
+    }
+  }
+}
